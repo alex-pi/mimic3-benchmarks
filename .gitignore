@@ -1,5 +1,6 @@
 # custom
 .idea
+*.iml
 miscellaneous
 notebook
 
@@ -96,3 +97,6 @@ ENV/
 # States of models
 keras_states/
 states/
+
+# Data folder
+data/

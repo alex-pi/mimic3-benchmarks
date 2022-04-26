@@ -1,0 +1,15 @@
+
+name: mimic3-benchmarks
+
+channels:
+  - conda-forge
+  - defaults
+
+dependencies:
+  - pip
+  - sklearn
+  - keras=2.1.2
+  - python
+  - numpy
+  - pandas
+  - tqdm
