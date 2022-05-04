@@ -24,8 +24,12 @@ parser.add_argument('--data', type=str, help='Path to the data of in-hospital mo
                     default=os.path.join(os.path.dirname(__file__), '../../data/in-hospital-mortality/'))
 parser.add_argument('--output_dir', type=str, help='Directory relative which all output files are stored',
                     default='.')
+parser.add_argument('--split', type=str, help='Used to indicate a different data split',
+                    default='')
 args = parser.parse_args()
 print(args)
+
+split = args.split
 
 if args.small_part:
     args.save_every = 2**30
@@ -33,12 +37,12 @@ if args.small_part:
 target_repl = (args.target_repl_coef > 0.0 and args.mode == 'train')
 
 # Build readers, discretizers, normalizers
-train_reader = InHospitalMortalityReader(dataset_dir=os.path.join(args.data, 'train'),
-                                         listfile=os.path.join(args.data, 'train_listfile.csv'),
+train_reader = InHospitalMortalityReader(dataset_dir=os.path.join(args.data, 'train_val'),
+                                         listfile=os.path.join(args.data, '{}train_listfile.csv'.format(split)),
                                          period_length=48.0)
 
-val_reader = InHospitalMortalityReader(dataset_dir=os.path.join(args.data, 'train'),
-                                       listfile=os.path.join(args.data, 'val_listfile.csv'),
+val_reader = InHospitalMortalityReader(dataset_dir=os.path.join(args.data, 'train_val'),
+                                       listfile=os.path.join(args.data, '{}val_listfile.csv'.format(split)),
                                        period_length=48.0)
 
 discretizer = Discretizer(timestep=float(args.timestep),
@@ -123,7 +127,8 @@ if target_repl:
 if args.mode == 'train':
 
     # Prepare training
-    path = os.path.join(args.output_dir, 'keras_states/' + model.final_name + '.epoch{epoch}.test{val_loss}.state')
+    base_path = os.path.join(args.output_dir, '{}keras_states/'.format(split))
+    path = os.path.join(base_path, model.final_name + '.epoch{epoch}.test{val_loss}.state')
 
     metrics_callback = keras_utils.InHospitalMortalityMetrics(train_data=train_raw,
                                                               val_data=val_raw,
@@ -139,7 +144,7 @@ if args.mode == 'train':
     keras_logs = os.path.join(args.output_dir, 'keras_logs')
     if not os.path.exists(keras_logs):
         os.makedirs(keras_logs)
-    csv_logger = CSVLogger(os.path.join(keras_logs, model.final_name + '.csv'),
+    csv_logger = CSVLogger(os.path.join(keras_logs, '{}{}.csv'.format(split, model.final_name)),
                            append=True, separator=';')
 
     print("==> training")
