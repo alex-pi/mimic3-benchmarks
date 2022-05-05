@@ -7,8 +7,9 @@ channels:
 
 dependencies:
   - pip
-  - sklearn
+  - scikit-learn
   - keras=2.1.2
+  - h5py=2.10.0
   - python
   - numpy
   - pandas

@@ -146,7 +146,7 @@ if args.mode == 'train':
     if not os.path.exists(keras_logs):
         os.makedirs(keras_logs)
     csv_logger = CSVLogger(os.path.join(keras_logs, '{}{}.csv'.format(split, model.final_name)),
-                           append=True, separator=';')
+                           append=True, separator=',')
 
     print("==> training")
     model.fit(x=train_raw[0],
