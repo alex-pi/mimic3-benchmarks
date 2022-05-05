@@ -2,6 +2,7 @@ from __future__ import absolute_import
 from __future__ import print_function
 
 import numpy as np
+import pandas as pd
 import argparse
 import os
 import imp
@@ -178,7 +179,13 @@ elif args.mode == 'test':
 
     predictions = model.predict(data, batch_size=args.batch_size, verbose=1)
     predictions = np.array(predictions)[:, 0]
-    metrics.print_metrics_binary(labels, predictions)
+    test_res = metrics.print_metrics_binary(labels, predictions)
+
+    resl = list()
+    resl.append(test_res)
+    test_res_pd = pd.DataFrame(resl)
+    print(test_res_pd.info())
+    test_res_pd.to_csv(os.path.join(args.output_dir, "test_predictions", '{}test_res.csv'.format(split)), index=False)
 
     path = os.path.join(args.output_dir, "test_predictions", os.path.basename(args.load_state)) + ".csv"
     utils.save_results(names, predictions, labels, path)
