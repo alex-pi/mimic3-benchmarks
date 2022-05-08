@@ -1,3 +1,19 @@
+##This is a fork of the original repository.
+
+We modified the LSTM model for in_hospital_mortality so that we can use different data splits derived from the original data set.
+
+To train the model on a specific data split run:
+
+```
+python -um mimic3models.in_hospital_mortality.main --network mimic3models/keras_models/lstm.py --dim 16 --timestep 1.0 --depth 2 --dropout 0.3 --mode train --batch_size 8 --output_dir mimic3models/in_hospital_mortality --split splitc_
+```
+
+To evaluate one of the produced models:
+
+```
+python -um mimic3models.in_hospital_mortality.main --network mimic3models/keras_models/lstm.py --dim 16 --timestep 1.0 --depth 2 --dropout 0.3 --mode test --batch_size 8 --output_dir mimic3models/in_hospital_mortality --split splitc_ --load_state mimic3models/in_hospital_mortality/splitc_keras_states/k_lstm.n16.d0.3.dep2.bs8.ts1.0.epoch54.test0.28050300171384895.state
+```
+
 MIMIC-III Benchmarks
 =========================
 

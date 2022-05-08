@@ -96,7 +96,7 @@ ENV/
 
 # States of models
 keras_states/
-split*keras_states/
+split*keras_states*/
 states/
 
 # Data folder
